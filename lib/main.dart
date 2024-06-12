@@ -44,7 +44,9 @@
 import 'package:flutter/material.dart';
 import 'ui/payment_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
