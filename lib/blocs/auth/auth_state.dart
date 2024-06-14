@@ -1,6 +1,4 @@
-
-
-import 'package:pagameto_credit_pix/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 abstract class AuthState {}
 
@@ -8,11 +6,13 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class Authenticated extends AuthState {
-  final User user;
+class AuthAuthenticated extends AuthState {
+  final firebase_auth.User? user;
 
-  Authenticated(this.user);
+  AuthAuthenticated(this.user);
 }
+
+class AuthUnauthenticated extends AuthState {}
 
 class AuthError extends AuthState {
   final String message;

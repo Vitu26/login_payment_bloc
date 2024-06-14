@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pagameto_credit_pix/blocs/auth/auth_bloc.dart';
-import 'package:pagameto_credit_pix/blocs/auth/auth_event.dart';
-import 'package:pagameto_credit_pix/blocs/auth/auth_state.dart';
-import 'login_screen.dart';
+import 'package:pagameto_credit_pix/blocs/product/product_bloc.dart';
+import 'package:pagameto_credit_pix/widgets/product_list.dart';
+
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = (BlocProvider.of<AuthBloc>(context).state as Authenticated).user;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(LogoutRequested());
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Text('Welcome, ${user.name}!'),
+      appBar: AppBar(title: Text('Products')),
+      body: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductInitial) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ProductLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ProductLoaded) {
+            return ProductList(products: state.products);
+          } else if (state is ProductError) {
+            return Center(child: Text(state.message));
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
